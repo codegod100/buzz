@@ -6,7 +6,7 @@
 # Requires a FlakeHub paid plan for successful cache pushes; without it builds
 # may still pass while cache upload returns HTTP 401.
 # Fork PRs cannot authenticate to FlakeHub Cache.
-# Linux only — FlakeHub Cache has no Darwin support.
+# Linux only — FlakeHub Cache has no Darwin support. Never map *-darwin here.
 
 name: FlakeHub CI
 
@@ -30,6 +30,11 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    # Cache-only by default (no flake publish). Uncomment to also publish:
-    # with:
-    #   visibility: public   # or unlisted | private
+    with:
+      # Override Determinate CI defaults that inject aarch64-darwin → macos-latest.
+      # FlakeHub Cache is Linux-only; nixpkgs 26.11+ also dropped x86_64-darwin.
+      runner-map: |
+        {
+          "x86_64-linux": "ubuntu-latest",
+          "aarch64-linux": "ubuntu-24.04-arm"
+        }
