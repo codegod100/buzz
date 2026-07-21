@@ -8,13 +8,12 @@
   outputs =
     { self, nixpkgs }:
     let
-      # Linux only: FlakeHub Cache has no Darwin support, and nixpkgs 26.11+
-      # dropped x86_64-darwin. Do not use flake-utils.eachDefaultSystem here —
-      # it injects darwin and breaks Determinate CI inventory.
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
+      # x86_64-linux only for FlakeHub CI.
+      # - No Darwin: FlakeHub Cache unsupported; nixpkgs 26.11 dropped x86_64-darwin.
+      # - No aarch64-linux for now: ARM GHA runner hit flaky npm DNS (EAI_AGAIN)
+      #   during buzz-web pnpm install.
+      # Do not use flake-utils.eachDefaultSystem (injects darwin).
+      systems = [ "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {

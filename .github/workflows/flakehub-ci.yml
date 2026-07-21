@@ -31,10 +31,9 @@ jobs:
       id-token: write
       contents: read
     with:
-      # Override Determinate CI defaults that inject aarch64-darwin → macos-latest.
-      # FlakeHub Cache is Linux-only; nixpkgs 26.11+ also dropped x86_64-darwin.
+      # x86_64-linux only. Override defaults that inject Darwin (and skip aarch64
+      # for now — ARM runners hit flaky npm DNS during buzz-web pnpm install).
       runner-map: |
         {
-          "x86_64-linux": "ubuntu-latest",
-          "aarch64-linux": "ubuntu-24.04-arm"
+          "x86_64-linux": "ubuntu-latest"
         }
