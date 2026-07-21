@@ -199,14 +199,14 @@
           pnpmDeps = pkgs.fetchPnpmDeps {
             inherit (finalAttrs) pname version src;
             inherit pnpm;
-            fetcherVersion = 3;
+            # pnpm_11 requires fetcherVersion >= 4 on current nixpkgs.
+            fetcherVersion = 4;
             # Mirror the Dockerfile: only the browser UIs, not desktop/Tauri.
             pnpmWorkspaces = [
               "buzz-web"
               "buzz-admin-web"
             ];
-            # Placeholder — filled after first build failure.
-            hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+            hash = "sha256-FqIdLRSPHTezJq0XlVERwDdWWOJSbjaXxNa337Hckvw=";
           };
 
           nativeBuildInputs = [
